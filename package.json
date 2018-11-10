@@ -1,0 +1,15 @@
+{
+  "name": "animebot",
+  "version": "1.0.0",
+  "description": "Discord Bot that utilizes Jikan API to pull from MyAnimeList",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "knowname",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^11.4.2",
+    "request": "^2.88.0"
+  }
+}
