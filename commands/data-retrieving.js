@@ -59,7 +59,8 @@ module.exports = function() {
 		});
 	};
 
-	this.getGenreData = function(type, genreID, pageNum = 1) {
+	this.getGenreData = function(type, genreID, pageNum) {
+		console.log(type, genreID, pageNum);
 
 		return new Promise(function(resolve, reject) {
 

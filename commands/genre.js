@@ -68,6 +68,7 @@ module.exports.run = async(bot, message, args) => {
 	else if (args.length > 1) {
 		if (regex.test(args[0])) {
 			var lastArg = parseInt(args[args.length - 1]);
+			var userPageNum = 1;
 			var genreSlice;
 
 			//console.log(isNaN(lastArg));
@@ -75,25 +76,77 @@ module.exports.run = async(bot, message, args) => {
 				genreSlice = args.slice(1);
 			} else {
 				genreSlice = args.slice(1, args.length-1);
+				userPageNum = args[args.length-1];
 				//console.log(genreSlice);
 			}
 
 			var genre = genreSlice.join("").toLowerCase();
+			var startIndex = ((userPageNum - 1)*10) % 100;
+			var pageRequest = Math.floor(((userPageNum - 1)*10)/100) +1;
 			//console.log(genre);
 
 			switch(args[0]) {
 				case "anime":
-					if(genre in animeGenres)
-						message.channel.send("genre in database");
-					else
-						message.channel.send("not in database");
+					if(genre in animeGenres) {
+						var genreAnimeData = await getGenreData("anime", animeGenres[genre], pageRequest);
+						//console.log(genreAnimeData);
+						//page 10 should be the second page link
+
+
+						if(genreAnimeData.error == null){
+							var animeEmbed = new Discord.RichEmbed()
+							.setTitle(genre.charAt(0).toUpperCase() + genre.slice(1) + " Anime ")
+							.setAuthor("MyAnimeList", "https://myanimelist.cdn-dena.com/img/sp/icon/apple-touch-icon-256.png")
+							.setColor("#4286f4");
+
+							var anime = "";
+
+							for(var i = startIndex; i < (startIndex + 10); i++) {
+								if(genreAnimeData.anime[i] != null)
+									anime += "**"+ (i+1) +".** " + genreAnimeData.anime[i].title + "\n\n"; 
+							}
+							animeEmbed.setDescription(anime);
+							message.channel.send(animeEmbed);
+
+
+						}
+						else {
+							message.channel.send("Invalid page number. \n $genre {anime/manga} for list of anime/manga genres \n $genre {anime/manga} {genre} {page number} leave page number blank for first page of results.");
+						}
+					} 
+					else {
+						message.channel.send("Genre not in the database");
+					}
 					break;
 
 				case "manga":
-					if(genre in mangaGenres)
-						message.channel.send("genre in database");
-					else
-						message.channel.send("not in database");
+					if(genre in mangaGenres) {
+						var genreMangaData = await getGenreData("manga", mangaGenres[genre], pageRequest);
+					
+						if(genreMangaData.error == null){
+							var mangaEmbed = new Discord.RichEmbed()
+							.setTitle(genre.charAt(0).toUpperCase() + genre.slice(1) + " Manga ")
+							.setAuthor("MyAnimeList", "https://myanimelist.cdn-dena.com/img/sp/icon/apple-touch-icon-256.png")
+							.setColor("#4286f4");
+
+							var manga = "";
+
+							for(var i = startIndex; i < (startIndex + 10); i++) {
+								if(genreMangaData.manga[i] != null)
+									manga += "**"+ (i+1) +".** " + genreMangaData.manga[i].title + "\n\n"; 
+							}
+							mangaEmbed.setDescription(manga);
+							message.channel.send(mangaEmbed);
+
+
+						}
+						else {
+							message.channel.send("Invalid page number. \n $genre {anime/manga} for list of anime/manga genres \n $genre {anime/manga} {genre} {page number} leave page number blank for first page of results.");
+						}
+					}
+					else {
+						message.channel.send("Genre not in the database");
+					}
 					break;
 			}
 		}

@@ -12,7 +12,7 @@ module.exports.run = async(bot, message, args) => {
 	while(animeData.error != null);
 
 	if(animeData.error == null) {
-		console.log(animeData);
+		//console.log(animeData);
 		//console.log(animeData.title); 
 		//console.log(animeData.synopsis); 
 
