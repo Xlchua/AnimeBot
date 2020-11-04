@@ -4,12 +4,13 @@
   "description": "Discord Bot that utilizes Jikan API to pull from MyAnimeList",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./index.js"
   },
-  "author": "knowname",
+  "author": "xlchua",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^11.4.2",
+    "discord.js": "^11.6.4",
     "request": "^2.88.0"
   }
 }
